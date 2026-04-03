@@ -6,6 +6,11 @@
   "name": "jetbrains-license-server-help-cloudflare",
   "main": "src/index.ts",
   "compatibility_date": "2025-12-01",
+  // Paid Workers: raise per-request CPU so "all products" license generation stays under limit.
+  // Free plan remains capped at 10ms CPU; upgrade or reduce product count if you see 1102 / exceededCpu.
+  "limits": {
+    "cpu_ms": 30000
+  },
   "assets": {
     "directory": "./public",
     "binding": "ASSETS"

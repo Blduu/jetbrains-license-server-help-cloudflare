@@ -267,7 +267,12 @@ const App = {
         this.showResultModal = true
       } catch (error) {
         console.error('生成激活码失败:', error)
-        Utils.showNotification('生成激活码失败，请重试', 'error')
+        const detail = error && error.message ? error.message : String(error)
+        const msg =
+          detail && detail !== 'undefined'
+            ? `生成激活码失败：${detail}`
+            : '生成激活码失败，请重试'
+        Utils.showNotification(msg, 'error')
       } finally {
         this.isGenerating = false
       }

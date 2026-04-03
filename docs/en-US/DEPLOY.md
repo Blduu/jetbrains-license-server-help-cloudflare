@@ -72,6 +72,7 @@ Copy `private.key`, `public.key`, `code-ca.crt`, `server-child-ca.crt` from the 
 | `wrangler` not found | Ensure `npm ci` without `--omit=dev` stripping production deps; `wrangler` is in `dependencies`. |
 | `/ja-netfilter` 404 | Commit `public/ja-netfilter.zip`. |
 | Build OK but 500 at runtime | Check Worker **Logs** in the dashboard; see `src/index.ts` error handler. |
+| "All products" fails while a single IDE works; **exceededCpu** or **1102** | Workers **Free** allows only **10ms CPU** per HTTP request; generating the full catalog (hundreds of product codes) often exceeds it. Upgrade to **Paid** and keep `limits.cpu_ms` in `wrangler.jsonc`, or raise the CPU limit in the dashboard. Run `node scripts/check-catalog-weight.mjs` locally to compare JSON size. |
 
 ## Related
 

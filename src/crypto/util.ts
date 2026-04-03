@@ -16,13 +16,15 @@ export function pemCertificateToDerBase64(pem: string): string {
 }
 
 export function bytesToBase64(bytes: Uint8Array): string {
-  let bin = "";
-  const chunk = 8192;
-  for (let i = 0; i < bytes.length; i += chunk) {
-    const sub = bytes.subarray(i, i + chunk);
-    bin += String.fromCharCode(...sub);
+  if (bytes.length === 0) return btoa("");
+  // Avoid spread on huge subarrays; apply is bounded by chunk size (0x8000).
+  let binary = "";
+  const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.subarray(i, Math.min(i + chunkSize, bytes.length));
+    binary += String.fromCharCode.apply(null, chunk as unknown as number[]);
   }
-  return btoa(bin);
+  return btoa(binary);
 }
 
 export function utf8(s: string): Uint8Array {

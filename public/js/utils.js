@@ -31,6 +31,14 @@ const Utils = {
     }
   },
 
+  escapeHtml(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+  },
+
   // 显示通知
   showNotification(message, type = 'success') {
     // 移除现有通知
@@ -39,13 +47,15 @@ const Utils = {
       existingNotification.remove()
     }
 
+    const safe = this.escapeHtml(message)
+
     // 创建新通知
     const notification = document.createElement('div')
     notification.className = `notification ${type}`
     notification.innerHTML = `
             <div class="flex items-center">
                 <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
-                <span>${message}</span>
+                <span>${safe}</span>
             </div>
         `
 
@@ -242,15 +252,26 @@ const ApiService = {
     return await this.get('/api/plugins')
   },
 
-  // 生成产品激活码
+  // 生成产品激活码（POST JSON，避免超长 productCode 触达 URL 上限）
   async generateLicense(productCode, licenseeName, assigneeName, expiryDate) {
-    const params = new URLSearchParams({
-      ...(productCode && { productCode }),
-      licenseeName,
+    const body = {
+      licenseName: licenseeName,
       assigneeName,
       expiryDate
+    }
+    if (productCode) body.productCode = productCode
+
+    const response = await fetch(`${this.baseURL}/license-code/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify(body)
     })
-    return await this.getText(`/license-code/generate?${params}`)
+    const text = await response.text()
+    if (!response.ok) {
+      const snippet = text.length > 160 ? text.slice(0, 160) + '…' : text
+      throw new Error(`HTTP ${response.status}${snippet ? ': ' + snippet : ''}`)
+    }
+    return text
   },
 
   // 下载代理工具
