@@ -1,0 +1,26 @@
+{
+  "name": "jetbrains-license-server-help-cloudflare",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "embed-pem": "node scripts/embed-pem.mjs",
+    "prebuild": "npm run embed-pem",
+    "build": "npm run check",
+    "check": "tsc --noEmit",
+    "deploy": "npm run embed-pem && wrangler deploy",
+    "dev": "npm run embed-pem && wrangler dev",
+    "test": "npm run embed-pem && vitest run",
+    "test:ci": "vitest run"
+  },
+  "dependencies": {
+    "wrangler": "^4.5.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250403.0",
+    "typescript": "^5.8.2",
+    "vitest": "^2.1.9"
+  }
+}

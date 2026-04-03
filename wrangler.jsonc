@@ -1,0 +1,16 @@
+{
+  // Cloudflare Workers Builds (Git):
+  // - Build command:  npm ci && npm run build
+  // - Deploy command: npx wrangler deploy  (dashboard default is fine)
+  // Dashboard worker name must match this "name" field.
+  "name": "jetbrains-license-server-help-cloudflare",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-12-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

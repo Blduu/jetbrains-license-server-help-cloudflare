@@ -1,0 +1,51 @@
+# Dependencies & package manager
+node_modules/
+.pnpm-store/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Wrangler / Workers
+.wrangler/
+.dev.vars
+.mf/
+
+# Build output
+dist/
+.turbo/
+*.tsbuildinfo
+
+# Tests & coverage
+coverage/
+.nyc_output/
+vitest*.timestamp-*
+
+# Vite / Vitest cache (if used)
+.vite/
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+.cursor/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# PEM source on disk (committed output is src/generated/pem.ts)
+private/certs/
+
+# Optional local npm config
+.npmrc.local
