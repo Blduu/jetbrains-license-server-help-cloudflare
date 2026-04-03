@@ -55,7 +55,7 @@ If you prefer CI on GitHub:
 2. In the repo: **Settings → Secrets and variables → Actions**, add **`CLOUDFLARE_API_TOKEN`** and **`CLOUDFLARE_ACCOUNT_ID`** (both required for `wrangler deploy` in CI).
 3. Workflow: [`.github/workflows/deploy.yml`](../../.github/workflows/deploy.yml).
 
-**Behavior:** Every push runs **Build and test**. The **Deploy to Cloudflare** step runs **only when both secrets are set** (GitHub does not allow `secrets` in job-level `if`, so this is a conditional step). If they are missing, CI still passes and deploy is skipped — use [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) in the dashboard instead, or add the secrets to enable Actions deploy.
+**Behavior:** Every push runs **Build and test**. The **Deploy to Cloudflare** step always runs, but the script **skips `npm run deploy`** when either secret is unset (GitHub does not allow the `secrets` context in `if:` expressions). If secrets are missing, CI still passes — use [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) in the dashboard instead, or add the secrets to enable Actions deploy.
 
 This is **independent** from dashboard Git integration — choose one deploy path (or use Actions for CI only).
 

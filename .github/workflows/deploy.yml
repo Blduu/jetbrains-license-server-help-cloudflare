@@ -32,10 +32,14 @@ jobs:
       - name: Unit tests
         run: npm run test:ci
 
-      # Job-level `if` cannot use `secrets.*` (invalid workflow). Step-level `if` can.
-      - name: Deploy to Cloudflare
-        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
-        run: npm run deploy
+      # Do not use `secrets` in `if:` (job or step) — GitHub rejects it. Skip deploy in shell when unset.
+      - name: Deploy to Cloudflare (optional)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ] || [ -z "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
+            echo "Skipping deploy: set CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in repo Actions secrets."
+            exit 0
+          fi
+          npm run deploy

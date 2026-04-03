@@ -55,7 +55,7 @@
 2. 在仓库 **Settings → Secrets and variables → Actions** 中添加 **`CLOUDFLARE_API_TOKEN`** 与 **`CLOUDFLARE_ACCOUNT_ID`**（CI 里执行 `wrangler deploy` **两者缺一不可**，否则会报非交互环境缺少 Token）。
 3. 工作流文件：[`.github/workflows/deploy.yml`](../../.github/workflows/deploy.yml)。
 
-**行为说明：** 每次推送都会跑 **构建与测试**。**Deploy to Cloudflare** 步骤仅在 **两个 Secret 都已配置** 时执行（GitHub 不允许在 **job** 的 `if` 里使用 `secrets`，故用**步骤级**条件）。若未配置，流水线仍为成功，仅跳过部署 —— 可改用上文 **Workers Builds** 在 Cloudflare 侧部署，或补全 Secret 以启用 Actions 部署。
+**行为说明：** 每次推送都会跑 **构建与测试**。**Deploy to Cloudflare** 步骤会执行，但脚本在检测到任一 Secret 未设置时 **跳过 `npm run deploy`**（GitHub 不允许在 `if:` 里使用 `secrets` 上下文）。若未配置 Secret，流水线仍为成功 —— 可改用上文 **Workers Builds** 在 Cloudflare 侧部署，或补全 Secret 以启用 Actions 部署。
 
 与控制台「连接 Git」的构建流程可按需**二选一**（也可只用 Actions 做 CI、在控制台部署）。
 
