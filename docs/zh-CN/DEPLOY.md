@@ -72,7 +72,7 @@
 | 找不到 `wrangler` | 确认 `npm ci` 未用 `--omit=dev` 误删生产依赖；`wrangler` 在 `dependencies` 中。 |
 | `/ja-netfilter` 404 | 提交 `public/ja-netfilter.zip`。 |
 | 构建成功但运行 500 | 查看控制台 Worker **日志**；参见 `src/index.ts` 错误处理。 |
-| 仅「全部产品」生成失败、单个 IDE 成功；指标 **exceededCpu** 或 **1102** | Workers **Free** 每请求 CPU 仅 **10ms**，全目录（约数百个产品码）生成易超限。升级到 **Paid** 后在控制台 **Worker → Settings** 调高 **CPU time limit**（或在 `wrangler.jsonc` 中配置 `limits.cpu_ms`，**仅 Paid 账号**可用；Free 账号写入该字段会导致部署 **100328**）。本地可运行 `node scripts/check-catalog-weight.mjs` 对比 JSON 规模。 |
+| 仅「全部产品」生成失败、单个 IDE 成功；指标 **exceededCpu** 或 **1102**；或 **500** `internal_error` | 未传 `productCode` 时 Worker 默认只包含 **product.json 中的 IDE 产品码**（体量小，适配 Free）。若需在**一条**激活码里包含全部付费插件码，须在请求里显式传入超长 `productCode` 列表，且通常需要 **Workers Paid** 与更高 CPU。`limits.cpu_ms` 仅 **Paid** 可用（Free 写入会报 **100328**）。运行 `node scripts/check-catalog-weight.mjs` 可对比 IDE-only 与「IDE+插件」JSON 长度。 |
 
 ## 相关链接
 

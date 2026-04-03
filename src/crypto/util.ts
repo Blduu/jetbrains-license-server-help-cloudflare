@@ -17,9 +17,9 @@ export function pemCertificateToDerBase64(pem: string): string {
 
 export function bytesToBase64(bytes: Uint8Array): string {
   if (bytes.length === 0) return btoa("");
-  // Avoid spread on huge subarrays; apply is bounded by chunk size (0x8000).
+  // Keep chunks at 8192: larger apply() argument counts can throw in some Workers/V8 paths.
   let binary = "";
-  const chunkSize = 0x8000;
+  const chunkSize = 8192;
   for (let i = 0; i < bytes.length; i += chunkSize) {
     const chunk = bytes.subarray(i, Math.min(i + chunkSize, bytes.length));
     binary += String.fromCharCode.apply(null, chunk as unknown as number[]);

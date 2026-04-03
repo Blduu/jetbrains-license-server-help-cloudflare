@@ -1,4 +1,4 @@
-import { allProductCodesForLicense, plugins, products } from "./data/catalog.js";
+import { allIdeProductCodesForLicense, plugins, products } from "./data/catalog.js";
 import { corsPreflightResponse, isPublicCorsPath, withPublicReadCors } from "./http/cors.js";
 import { generateActivationCode } from "./license/generate-code.js";
 import {
@@ -116,7 +116,7 @@ async function parseGenerateBody(
 
 async function resolveProductCodes(productCodeParam: string | null): Promise<Set<string>> {
   if (productCodeParam == null || productCodeParam.trim() === "") {
-    return allProductCodesForLicense();
+    return allIdeProductCodesForLicense();
   }
   const set = new Set<string>();
   for (const p of productCodeParam.split(",")) {

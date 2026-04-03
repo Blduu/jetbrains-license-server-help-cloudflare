@@ -25,6 +25,15 @@ for (const pl of pluginJson) {
   if (c) codes.add(c);
 }
 const sorted = [...codes].sort();
+const ideOnly = new Set();
+for (const p of productJson) {
+  if (!p.productCode?.trim()) continue;
+  for (const part of p.productCode.split(",")) {
+    const c = part.trim();
+    if (c) ideOnly.add(c);
+  }
+}
+const ideSorted = [...ideOnly].sort();
 const id = "a".repeat(32);
 function buildProductJson(code, exp) {
   return `{"code":${JSON.stringify(code)},"fallbackDate":${JSON.stringify(exp)},"paidUpTo":${JSON.stringify(exp)}}`;
@@ -35,7 +44,8 @@ function buildLicenseJson(productCodes, exp) {
 }
 const exp = "2090-09-03";
 const one = buildLicenseJson(["II"], exp);
+const allIde = buildLicenseJson(ideSorted, exp);
 const all = buildLicenseJson(sorted, exp);
-console.log("Unique product codes in catalog:", sorted.length);
+console.log("IDE-only codes (default when productCode omitted):", ideSorted.length, "json length", allIde.length);
+console.log("IDE + all plugins (explicit long list only):", sorted.length, "json length", all.length);
 console.log("Approx license JSON length (single II):", one.length);
-console.log("Approx license JSON length (all catalog):", all.length);

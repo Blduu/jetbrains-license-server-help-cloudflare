@@ -72,7 +72,7 @@ Copy `private.key`, `public.key`, `code-ca.crt`, `server-child-ca.crt` from the 
 | `wrangler` not found | Ensure `npm ci` without `--omit=dev` stripping production deps; `wrangler` is in `dependencies`. |
 | `/ja-netfilter` 404 | Commit `public/ja-netfilter.zip`. |
 | Build OK but 500 at runtime | Check Worker **Logs** in the dashboard; see `src/index.ts` error handler. |
-| "All products" fails while a single IDE works; **exceededCpu** or **1102** | Workers **Free** allows only **10ms CPU** per HTTP request; generating the full catalog (hundreds of product codes) often exceeds it. Upgrade to **Paid**, then raise **CPU time limit** under **Worker → Settings** (or add `limits.cpu_ms` in `wrangler.jsonc` — **Paid accounts only**; on Free, that field causes deploy error **100328**). Run `node scripts/check-catalog-weight.mjs` locally to compare JSON size. |
+| "All products" fails; **exceededCpu** / **1102**; or **500** `internal_error` | When `productCode` is omitted, the Worker defaults to **IDE codes from `product.json` only** (small enough for Free). To pack **every paid plugin** into one activation code, pass an explicit long `productCode` list and usually **Workers Paid** + higher CPU. `limits.cpu_ms` is **Paid-only** (on Free, Wrangler deploy fails with **100328**). Run `node scripts/check-catalog-weight.mjs` to compare payload sizes. |
 
 ## Related
 
