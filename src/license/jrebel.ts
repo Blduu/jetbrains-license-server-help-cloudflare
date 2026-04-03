@@ -15,7 +15,7 @@ async function getJrebelKey(): Promise<CryptoKey> {
   jrebelKey = await crypto.subtle.importKey(
     "pkcs8",
     buf,
-    { name: "RSA-PKCS1-v1_5", hash: "SHA-1" },
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-1" },
     false,
     ["sign"],
   );
@@ -34,7 +34,7 @@ export async function jrebelLeaseSignature(
     : [clientRandomness, SERVER_RANDOMNESS, guid, String(offline)];
   const s2 = parts.join(";");
   const key = await getJrebelKey();
-  const sig = await crypto.subtle.sign({ name: "RSA-PKCS1-v1_5" }, key, new TextEncoder().encode(s2));
+  const sig = await crypto.subtle.sign({ name: "RSASSA-PKCS1-v1_5" }, key, new TextEncoder().encode(s2));
   const sigBytes = new Uint8Array(sig);
   return btoa(String.fromCharCode(...sigBytes));
 }

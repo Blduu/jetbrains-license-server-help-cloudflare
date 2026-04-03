@@ -10,7 +10,7 @@ export async function getPrivateKeySha1(): Promise<CryptoKey> {
   keySha1 = await crypto.subtle.importKey(
     "pkcs8",
     der,
-    { name: "RSA-PKCS1-v1_5", hash: "SHA-1" },
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-1" },
     false,
     ["sign"],
   );
@@ -23,7 +23,7 @@ export async function getPrivateKeySha512(): Promise<CryptoKey> {
   keySha512 = await crypto.subtle.importKey(
     "pkcs8",
     der,
-    { name: "RSA-PKCS1-v1_5", hash: "SHA-512" },
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-512" },
     false,
     ["sign"],
   );

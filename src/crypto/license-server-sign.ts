@@ -8,13 +8,13 @@ export const LEASE_CONTENT = `4102415999000:${SERVER_UID}`;
 
 export async function signContentSha1(content: string): Promise<string> {
   const key = await getPrivateKeySha1();
-  const sig = await crypto.subtle.sign({ name: "RSA-PKCS1-v1_5" }, key, utf8(content));
+  const sig = await crypto.subtle.sign({ name: "RSASSA-PKCS1-v1_5" }, key, utf8(content));
   return bytesToBase64(new Uint8Array(sig));
 }
 
 export async function signContentSha512(content: string): Promise<string> {
   const key = await getPrivateKeySha512();
-  const sig = await crypto.subtle.sign({ name: "RSA-PKCS1-v1_5" }, key, utf8(content));
+  const sig = await crypto.subtle.sign({ name: "RSASSA-PKCS1-v1_5" }, key, utf8(content));
   return bytesToBase64(new Uint8Array(sig));
 }
 

@@ -52,7 +52,7 @@ export async function generateActivationCode(
   const licensePartBase64 = utf8JsonToLicenseBase64(licensePartJson);
   const key = await getPrivateKeySha1();
   const sig = await crypto.subtle.sign(
-    { name: "RSA-PKCS1-v1_5" },
+    { name: "RSASSA-PKCS1-v1_5" },
     key,
     utf8(licensePartJson),
   );
