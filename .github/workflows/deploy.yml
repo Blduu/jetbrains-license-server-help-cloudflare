@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   ci:
-    name: Build and test
+    name: Build, test, and optional deploy
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -32,25 +32,9 @@ jobs:
       - name: Unit tests
         run: npm run test:ci
 
-  deploy:
-    name: Publish Worker
-    needs: ci
-    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
+      # Job-level `if` cannot use `secrets.*` (invalid workflow). Step-level `if` can.
       - name: Deploy to Cloudflare
+        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
         run: npm run deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
